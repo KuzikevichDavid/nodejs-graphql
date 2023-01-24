@@ -108,6 +108,17 @@ export default abstract class DBEntity<
     return deleted;
   }
 
+  async deleteMany<K extends keyof Entity>(
+    options: OptionsEquals<Entity, K>
+  ): Promise<Entity[]> {
+    const result: Entity[] = [];
+    const entitiesToDelete = await this.findMany(options);
+    for (const val of entitiesToDelete) {
+      result.push(await this.delete(val.id));
+    }
+    return result;
+  }
+
   async change(id: string, changeDTO: ChangeDTO): Promise<Entity> {
     const idx = this.entities.findIndex((entity) => entity.id === id);
     if (idx === -1) throw new NoRequiredEntity('change');
