@@ -5,7 +5,7 @@ type UnpackArray<T> = T extends (infer R)[] ? R : never;
 interface Options<T, K extends keyof T> {
   key: K;
   equals?: T[K];
-  equalsAnyOf?: T[K][];
+  equalsAnyOf?: readonly T[K][];
   inArray?: UnpackArray<T[K]>;
   inArrayAnyOf?: UnpackArray<T[K]> extends never ? never : UnpackArray<T[K]>[];
 }
@@ -44,15 +44,13 @@ export default abstract class DBEntity<
       );
     }
     if (options.inArray) {
-      const array = entity[options.key] as typeof options.inArray[];
+      const array = entity[options.key] as (typeof options.inArray)[];
       return array.some((value) => lodash.isEqual(value, options.inArray));
     }
     if (options.inArrayAnyOf) {
-      const array = entity[options.key] as typeof options.inArray[];
+      const array = entity[options.key] as (typeof options.inArray)[];
       return array.some((value) =>
-        options.inArrayAnyOf?.some((valueInput) =>
-          lodash.isEqual(value, valueInput)
-        )
+        options.inArrayAnyOf?.some((valueInput) => lodash.isEqual(value, valueInput))
       );
     }
     return false;
@@ -73,9 +71,7 @@ export default abstract class DBEntity<
   async findOne<K extends keyof Entity>(
     options: Options<Entity, K>
   ): Promise<Entity | null> {
-    return (
-      this.entities.find((entity) => this.runChecks(entity, options)) ?? null
-    );
+    return this.entities.find((entity) => this.runChecks(entity, options)) ?? null;
   }
 
   async findMany<K extends keyof Entity>(

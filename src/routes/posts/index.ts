@@ -6,10 +6,7 @@ import { idNotFound } from '../replyMessages';
 
 const ENTITY_NAME = 'post';
 
-const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
-  fastify
-): Promise<void> => {
-
+const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
   fastify.get('/', async function (request, reply): Promise<PostEntity[]> {
     return fastify.db.posts.findMany();
   });
@@ -18,11 +15,14 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     '/:id',
     {
       schema: {
-        params: idParamSchema,
-      },
+        params: idParamSchema
+      }
     },
     async function (request, reply): Promise<PostEntity | undefined> {
-      const post = await fastify.db.posts.findOne({ key: "id", equals: request.params.id });
+      const post = await fastify.db.posts.findOne({
+        key: 'id',
+        equals: request.params.id
+      });
       if (!post) {
         reply.notFound(idNotFound(ENTITY_NAME, request.params.id));
         return;
@@ -35,11 +35,14 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     '/',
     {
       schema: {
-        body: createPostBodySchema,
-      },
+        body: createPostBodySchema
+      }
     },
     async function (request, reply): Promise<PostEntity | undefined> {
-      const user = await fastify.db.users.findOne({ key: "id", equals: request.body.userId });
+      const user = await fastify.db.users.findOne({
+        key: 'id',
+        equals: request.body.userId
+      });
       if (!user) {
         reply.badRequest(idNotFound('user', request.body.userId));
       }
@@ -52,11 +55,14 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     '/:id',
     {
       schema: {
-        params: idParamSchema,
-      },
+        params: idParamSchema
+      }
     },
     async function (request, reply): Promise<PostEntity | undefined> {
-      const post = await fastify.db.posts.findOne({ key: "id", equals: request.params.id });
+      const post = await fastify.db.posts.findOne({
+        key: 'id',
+        equals: request.params.id
+      });
       if (!post) {
         reply.badRequest(idNotFound(ENTITY_NAME, request.params.id));
         return;
@@ -71,11 +77,14 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     {
       schema: {
         body: changePostBodySchema,
-        params: idParamSchema,
-      },
+        params: idParamSchema
+      }
     },
     async function (request, reply): Promise<PostEntity | undefined> {
-      const post = await fastify.db.posts.findOne({ key: "id", equals: request.params.id });
+      const post = await fastify.db.posts.findOne({
+        key: 'id',
+        equals: request.params.id
+      });
       if (!post) {
         reply.badRequest(idNotFound(ENTITY_NAME, request.params.id));
         return;

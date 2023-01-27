@@ -5,12 +5,12 @@ import { FastifyPluginAsync } from 'fastify';
 const app: FastifyPluginAsync = async (fastify): Promise<void> => {
   fastify.register(AutoLoad, {
     dir: join(__dirname, 'plugins'),
-    options: {},
+    options: {}
   });
 
   fastify.register(AutoLoad, {
     dir: join(__dirname, 'routes'),
-    options: {},
+    options: {}
   });
 };
 

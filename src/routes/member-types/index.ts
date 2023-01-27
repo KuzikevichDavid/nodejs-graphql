@@ -6,10 +6,7 @@ import { idNotFound } from '../replyMessages';
 
 const ENTITY_NAME = 'member-type';
 
-const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
-  fastify
-): Promise<void> => {
-
+const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
   fastify.get('/', async function (request, reply): Promise<MemberTypeEntity[]> {
     return fastify.db.memberTypes.findMany();
   });
@@ -18,11 +15,14 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     '/:id',
     {
       schema: {
-        params: idParamSchema,
-      },
+        params: idParamSchema
+      }
     },
     async function (request, reply): Promise<MemberTypeEntity | undefined> {
-      const memberType = await fastify.db.memberTypes.findOne({ key: "id", equals: request.params.id });
+      const memberType = await fastify.db.memberTypes.findOne({
+        key: 'id',
+        equals: request.params.id
+      });
       if (!memberType) {
         reply.notFound(idNotFound(ENTITY_NAME, request.params.id));
         return;
@@ -37,11 +37,14 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     {
       schema: {
         body: changeMemberTypeBodySchema,
-        params: idParamSchema,
-      },
+        params: idParamSchema
+      }
     },
     async function (request, reply): Promise<MemberTypeEntity | undefined> {
-      const memberType = await fastify.db.memberTypes.findOne({ key: "id", equals: request.params.id });
+      const memberType = await fastify.db.memberTypes.findOne({
+        key: 'id',
+        equals: request.params.id
+      });
       if (!memberType) {
         reply.badRequest(idNotFound(ENTITY_NAME, request.params.id));
         return;

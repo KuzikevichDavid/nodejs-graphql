@@ -6,10 +6,7 @@ import { existsWithEntityId, idNotFound } from '../replyMessages';
 
 const ENTITY_NAME = 'profile';
 
-const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
-  fastify
-): Promise<void> => {
-
+const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
   fastify.get('/', async function (request, reply): Promise<ProfileEntity[]> {
     return fastify.db.profiles.findMany();
   });
@@ -18,13 +15,16 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     '/:id',
     {
       schema: {
-        params: idParamSchema,
-      },
+        params: idParamSchema
+      }
     },
     async function (request, reply): Promise<ProfileEntity | undefined> {
-      const profile = await fastify.db.profiles.findOne({ key: "id", equals: request.params.id });
+      const profile = await fastify.db.profiles.findOne({
+        key: 'id',
+        equals: request.params.id
+      });
       if (!profile) {
-        reply.notFound(idNotFound(ENTITY_NAME, request.params.id))
+        reply.notFound(idNotFound(ENTITY_NAME, request.params.id));
         return;
       }
       return profile;
@@ -35,23 +35,32 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     '/',
     {
       schema: {
-        body: createProfileBodySchema,
-      },
+        body: createProfileBodySchema
+      }
     },
     async function (request, reply): Promise<ProfileEntity | undefined> {
-      const user = await fastify.db.users.findOne({ key: "id", equals: request.body.userId });
+      const user = await fastify.db.users.findOne({
+        key: 'id',
+        equals: request.body.userId
+      });
       if (!user) {
         reply.badRequest(idNotFound('user', request.body.userId));
         return;
       }
 
-      const profile = await fastify.db.profiles.findOne({ key: "userId", equals: request.body.userId });
+      const profile = await fastify.db.profiles.findOne({
+        key: 'userId',
+        equals: request.body.userId
+      });
       if (profile) {
         reply.badRequest(existsWithEntityId(ENTITY_NAME, request.body.userId));
         return;
       }
 
-      const member = await fastify.db.memberTypes.findOne({ key: "id", equals: request.body.memberTypeId });
+      const member = await fastify.db.memberTypes.findOne({
+        key: 'id',
+        equals: request.body.memberTypeId
+      });
       if (!member) {
         reply.badRequest(idNotFound('member-type', request.body.memberTypeId));
         return;
@@ -65,11 +74,14 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     '/:id',
     {
       schema: {
-        params: idParamSchema,
-      },
+        params: idParamSchema
+      }
     },
     async function (request, reply): Promise<ProfileEntity | undefined> {
-      const profile = await fastify.db.profiles.findOne({ key: "id", equals: request.params.id });
+      const profile = await fastify.db.profiles.findOne({
+        key: 'id',
+        equals: request.params.id
+      });
       if (!profile) {
         reply.badRequest(idNotFound(ENTITY_NAME, request.params.id));
         return;
@@ -84,11 +96,14 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     {
       schema: {
         body: changeProfileBodySchema,
-        params: idParamSchema,
-      },
+        params: idParamSchema
+      }
     },
     async function (request, reply): Promise<ProfileEntity | undefined> {
-      const profile = await fastify.db.profiles.findOne({ key: "id", equals: request.params.id });
+      const profile = await fastify.db.profiles.findOne({
+        key: 'id',
+        equals: request.params.id
+      });
       if (!profile) {
         reply.badRequest(idNotFound(ENTITY_NAME, request.params.id));
         return;

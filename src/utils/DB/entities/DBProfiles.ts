@@ -23,7 +23,7 @@ export default class DBProfiles extends DBEntity<
   async create(dto: CreateProfileDTO) {
     const created: ProfileEntity = {
       ...dto,
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID()
     };
     this.entities.push(created);
     return created;

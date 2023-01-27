@@ -24,7 +24,7 @@ export default class DB {
         } else {
           return target[prop];
         }
-      },
+      }
     };
     for (const [k, v] of Object.entries(this)) {
       this[k as keyof typeof this] = new Proxy(v, deepCopyResultTrap);
