@@ -1,4 +1,10 @@
-import { GraphQLObjectType, GraphQLID, GraphQLList } from 'graphql';
+import {
+  GraphQLObjectType,
+  GraphQLID,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLString
+} from 'graphql';
 import DB from '../../utils/DB/DB';
 import { userType, postType, profileType, memberType } from './types';
 
@@ -10,7 +16,7 @@ export const initQLQuery = (db: DB) => {
     fields: {
       user: {
         type: userType,
-        args: { id: { type: GraphQLID } },
+        args: { id: { type: new GraphQLNonNull(GraphQLID) } },
         async resolve(parent, args) {
           return db.users.findOne({ key: 'id', equals: args.id });
         }
@@ -23,7 +29,7 @@ export const initQLQuery = (db: DB) => {
       },
       post: {
         type: postType,
-        args: { id: { type: GraphQLID } },
+        args: { id: { type: new GraphQLNonNull(GraphQLID) } },
         async resolve(parent, args) {
           return db.posts.findOne({ key: 'id', equals: args.id });
         }
@@ -36,7 +42,7 @@ export const initQLQuery = (db: DB) => {
       },
       profile: {
         type: profileType,
-        args: { id: { type: GraphQLID } },
+        args: { id: { type: new GraphQLNonNull(GraphQLID) } },
         async resolve(parent, args) {
           return db.profiles.findOne({ key: 'id', equals: args.id });
         }
@@ -47,10 +53,17 @@ export const initQLQuery = (db: DB) => {
           return await db.profiles.findMany();
         }
       },
+      memberType: {
+        type: memberType,
+        args: { id: { type: new GraphQLNonNull(GraphQLString) } },
+        async resolve(parent, args) {
+          return db.memberTypes.findOne({ key: 'id', equals: args.id });
+        }
+      },
       memberTypes: {
         type: new GraphQLList(memberType),
         async resolve(parent, args) {
-          return db.profiles.findMany();
+          return db.memberTypes.findMany();
         }
       }
     }

@@ -20,6 +20,7 @@ export let postCreateDTOType: GraphQLInputObjectType;
 export let postChangeDTOType: GraphQLInputObjectType;
 export let profileCreateDTOType: GraphQLInputObjectType;
 export let profileChangeDTOType: GraphQLInputObjectType;
+export let memberChangeDTOType: GraphQLInputObjectType;
 
 export const initQLTypes = (db: DB) => {
   userType = new GraphQLObjectType({
@@ -42,12 +43,21 @@ export const initQLTypes = (db: DB) => {
           return db.posts.findMany({ key: 'userId', equals: parent.id });
         }
       },
-      subscribers: {
+      subscribedToUser: {
         type: new GraphQLList(userType),
         async resolve(parent, args) {
           return db.users.findMany({
             key: 'id',
             equalsAnyOf: parent.subscribedToUserIds
+          });
+        }
+      },
+      userSubscribedTo: {
+        type: new GraphQLList(userType),
+        async resolve(parent, args) {
+          return db.users.findMany({
+            key: 'subscribedToUserIds',
+            inArray: parent.id
           });
         }
       }
@@ -127,7 +137,7 @@ export const initQLTypes = (db: DB) => {
   });
 
   userSubscriptionDTOType = new GraphQLInputObjectType({
-    name: 'userSubscriprionDTO',
+    name: 'userSubscriptionDTO',
     fields: {
       id: { type: new GraphQLNonNull(GraphQLID) },
       userId: { type: new GraphQLNonNull(GraphQLID) }
@@ -177,6 +187,15 @@ export const initQLTypes = (db: DB) => {
       street: { type: GraphQLString },
       city: { type: GraphQLString },
       memberTypeId: { type: GraphQLString }
+    }
+  });
+
+  memberChangeDTOType = new GraphQLInputObjectType({
+    name: 'memberChangeDTO',
+    fields: {
+      id: { type: new GraphQLNonNull(GraphQLString) },
+      discount: { type: GraphQLInt },
+      monthPostsLimit: { type: GraphQLInt }
     }
   });
 };

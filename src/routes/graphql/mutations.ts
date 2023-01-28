@@ -13,7 +13,9 @@ import {
   profileCreateDTOType,
   profileChangeDTOType,
   userSubscriptionDTOType,
-  profileType
+  profileType,
+  memberChangeDTOType,
+  memberType
 } from './types';
 
 export let mutations: GraphQLObjectType;
@@ -52,7 +54,6 @@ export const initQLMutations = (db: DB) => {
       subscribeTo: {
         type: userType,
         args: {
-          id: { type: new GraphQLNonNull(GraphQLID) },
           input: { type: new GraphQLNonNull(userSubscriptionDTOType) }
         },
         async resolve(parent, args) {
@@ -62,11 +63,10 @@ export const initQLMutations = (db: DB) => {
       unsubscribeFrom: {
         type: userType,
         args: {
-          id: { type: new GraphQLNonNull(GraphQLID) },
           input: { type: new GraphQLNonNull(userSubscriptionDTOType) }
         },
         async resolve(parent, args) {
-          return userOperations.unsubscribeUser(args.input.id, args.input.UserId);
+          return userOperations.unsubscribeUser(args.input.id, args.input.userId);
         }
       },
       addPost: {
@@ -81,7 +81,6 @@ export const initQLMutations = (db: DB) => {
       editPost: {
         type: postType,
         args: {
-          id: { type: new GraphQLNonNull(GraphQLID) },
           input: { type: new GraphQLNonNull(postChangeDTOType) }
         },
         async resolve(parent, args) {
@@ -109,11 +108,10 @@ export const initQLMutations = (db: DB) => {
       editProfile: {
         type: profileType,
         args: {
-          id: { type: new GraphQLNonNull(GraphQLID) },
           input: { type: new GraphQLNonNull(profileChangeDTOType) }
         },
         async resolve(parent, args) {
-          return db.profiles.change(args.id, args.input);
+          return db.profiles.change(args.input.id, args.input);
         }
       },
       deleteProfile: {
@@ -123,6 +121,15 @@ export const initQLMutations = (db: DB) => {
         },
         async resolve(parent, args) {
           return db.profiles.delete(args.id);
+        }
+      },
+      editMember: {
+        type: memberType,
+        args: {
+          input: { type: new GraphQLNonNull(memberChangeDTOType) }
+        },
+        async resolve(parent, args) {
+          return db.memberTypes.change(args.input.id, args.input);
         }
       }
     }
