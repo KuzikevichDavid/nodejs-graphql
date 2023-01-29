@@ -1,5 +1,6 @@
 import { FastifyPluginAsyncJsonSchemaToTs } from '@fastify/type-provider-json-schema-to-ts';
-import { graphql } from 'graphql';
+import { graphql, parse, validate } from 'graphql';
+import depthLimit = require('graphql-depth-limit');
 import { createSchema, graphqlBodySchema } from './schema';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
@@ -7,12 +8,15 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
   const resolveGraphql = (
     source: string,
     variables: { [x: string]: unknown } | undefined
-  ) =>
-    graphql({
+  ) => {
+    const validation_errors = validate(graphqlSchema, parse(source), [depthLimit(5)]);
+    if (validation_errors.length > 0) return validation_errors;
+    return graphql({
       schema: graphqlSchema,
       source: source,
       variableValues: variables /*, contextValue*/
     });
+  };
 
   fastify.post(
     '/',
