@@ -42,7 +42,7 @@ export const initLoader = (db: DB): Loader => {
   // users
   const loadUsers = async (keys: readonly string[]) => {
     console.log('loadUsers');
-    const users = await db.users.findMany({ key: 'id', equalsAnyOf: keys });
+    const users = await db.users.findMany({ key: 'id', equalsAnyOf: new Array(...keys) });
     const res: Record<string, UserEntity> = {};
     const resArr: Record<string, UserEntity[]> = {};
     users.forEach((u) => {
@@ -98,7 +98,7 @@ export const initLoader = (db: DB): Loader => {
     console.log('loadPosts');
     const res: Record<string, PostEntity> = {}
     const resArr: Record<string, PostEntity[]> = {};
-    const result = await db.posts.findMany({ key: 'id', equalsAnyOf: keys });
+    const result = await db.posts.findMany({ key: 'id', equalsAnyOf: new Array(...keys) });
     result.forEach((e) => {
       res[e.id] = e;
       if (!resArr[e.userId]) resArr[e.userId] = []
@@ -129,7 +129,7 @@ export const initLoader = (db: DB): Loader => {
   const loadPostsByUserId = async (keys: readonly string[]) => {
     console.log('loadPostsByUserId');
     const res: Record<string, PostEntity[]> = {};
-    const result = await db.posts.findMany({ key: 'userId', equalsAnyOf: keys });
+    const result = await db.posts.findMany({ key: 'userId', equalsAnyOf: new Array(...keys) });
     result.forEach((e) => {
       loader.postsById.prime(e.id, e);
       if (!res[e.userId]) res[e.userId] = []
@@ -143,7 +143,7 @@ export const initLoader = (db: DB): Loader => {
   const loadProfile = async (keys: readonly string[]) => {
     console.log('loadProfile');
     const res: Record<string, ProfileEntity> = {}
-    const result = await db.profiles.findMany({ key: 'id', equalsAnyOf: keys });
+    const result = await db.profiles.findMany({ key: 'id', equalsAnyOf: new Array(...keys) });
     result.forEach((e) => {
       res[e.id] = e;
       loader.profilesByUserId.prime(e.userId, e)
@@ -163,7 +163,7 @@ export const initLoader = (db: DB): Loader => {
   const loadProfilesByUserId = async (keys: readonly string[]) => {
     console.log('loadProfilesByUserId');
     const res: Record<string, ProfileEntity> = {}
-    const result = await db.profiles.findMany({ key: 'userId', equalsAnyOf: keys });
+    const result = await db.profiles.findMany({ key: 'userId', equalsAnyOf: new Array(...keys) });
     result.forEach((e) => {
       loader.profilesById.prime(e.id, e);
       res[e.userId] = e;

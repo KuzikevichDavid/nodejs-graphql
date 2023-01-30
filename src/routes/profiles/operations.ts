@@ -22,8 +22,6 @@ export const initProfileOperations = (db: DB) => {
       equals: profileDTO.userId
     });
     if (!user) {
-      //reply.badRequest(idNotFound('user', userId));
-      //return;
       throw new BadRequest(Operations.create, idNotFound('user', profileDTO.userId));
     }
 
@@ -32,8 +30,6 @@ export const initProfileOperations = (db: DB) => {
       equals: profileDTO.userId
     });
     if (profile) {
-      //reply.badRequest(existsWithEntityId(ENTITY_NAME, userId));
-      //return;
       throw new BadRequest(
         Operations.create,
         existsWithEntityId(ENTITY_NAME, profileDTO.userId)
@@ -45,8 +41,6 @@ export const initProfileOperations = (db: DB) => {
       equals: profileDTO.memberTypeId
     });
     if (!member) {
-      //reply.badRequest(idNotFound('member-type', memberTypeId));
-      //return;
       throw new BadRequest(
         Operations.create,
         idNotFound('member-type', profileDTO.memberTypeId)

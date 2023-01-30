@@ -19,18 +19,20 @@ export default class DBMemberTypes extends DBEntity<
     this.create({
       id: 'basic',
       discount: 0,
-      monthPostsLimit: 20
+      monthPostsLimit: 20,
     });
     this.create({
       id: 'business',
       discount: 5,
-      monthPostsLimit: 100
+      monthPostsLimit: 100,
     });
 
     const forbidOperationTrap: ProxyHandler<any> = {
       apply(target) {
-        throw new Error(`forbidden operation: cannot ${target.name} a member type`);
-      }
+        throw new Error(
+          `forbidden operation: cannot ${target.name} a member type`
+        );
+      },
     };
 
     this.delete = new Proxy(this.delete, forbidOperationTrap);
@@ -39,7 +41,7 @@ export default class DBMemberTypes extends DBEntity<
 
   async create(dto: CreateMemberTypeDTO) {
     const created: MemberTypeEntity = {
-      ...dto
+      ...dto,
     };
     this.entities.push(created);
     return created;

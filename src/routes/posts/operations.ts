@@ -20,7 +20,6 @@ export const initPostOperations = (db: DB) => {
       equals: createDto.userId
     });
     if (!user) {
-      //reply.badRequest(idNotFound('user', body.userId));
       throw new BadRequest(Operations.createPost, idNotFound('user', createDto.userId));
     }
 

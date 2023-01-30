@@ -48,13 +48,15 @@ export const initUserOperations = (db: DB) => {
     });
 
     if (!userToDelete) {
-      //reply.badRequest(idNotFound(ENTITY_NAME, deleteId));
-      //return;
       throw new BadRequest(Operations.delete, idNotFound(ENTITY_NAME, deleteId));
     }
 
-    await db.posts.deleteMany({ key: 'userId', equals: userToDelete.id });
-    await db.profiles.deleteMany({ key: 'userId', equals: userToDelete.id });
+    const postsToDelete = await db.posts.findMany({ key: 'userId', equals: userToDelete.id });
+    postsToDelete.forEach(async (post) => await db.posts.delete(post.id));
+
+    const profileToDelete = await db.profiles.findOne({ key: 'userId', equals: userToDelete.id });
+    if (profileToDelete) await db.profiles.delete(profileToDelete.id);
+
     const subscribers = await db.users.findMany({
       key: 'subscribedToUserIds',
       inArray: deleteId
@@ -62,8 +64,6 @@ export const initUserOperations = (db: DB) => {
     subscribers.forEach((s) => unsubscribe(s, userToDelete));
 
     return await db.users.delete(userToDelete.id);
-    // reply.code(204);
-    // return;
   };
 
   const subscribeUser = async (subscriberId: string, blogerId: string) => {
@@ -81,8 +81,6 @@ export const initUserOperations = (db: DB) => {
         if (msg.length > 0) msg += ' ';
         msg += idNotFound(ENTITY_NAME, blogerId);
       }
-      //reply.notFound(msg);
-      //return;
       throw new NotFound(Operations.subscribe, msg);
     }
 
@@ -104,14 +102,10 @@ export const initUserOperations = (db: DB) => {
         if (msg.length > 0) msg += ' ';
         msg += idNotFound(ENTITY_NAME, blogerId);
       }
-      //reply.badRequest(msg);
-      //return;
       throw new BadRequest(Operations.unsubscribe, msg);
     }
     const result = unsubscribe(subscriber, bloger);
     if (!result) {
-      //reply.badRequest();
-      //return;
       throw new BadRequest(
         Operations.unsubscribe,
         `user with id ${subscriberId} not follow on user with id ${blogerId}`
