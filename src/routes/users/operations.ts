@@ -10,7 +10,7 @@ const enum Operations {
   delete = 'delete'
 }
 
-interface UserOpeations {
+export interface UserOpeations {
   ENTITY_NAME: string;
   deleteUser(deleteId: string): Promise<UserEntity>;
   unsubscribeUser(subscriberId: string, blogerId: string): Promise<UserEntity>;

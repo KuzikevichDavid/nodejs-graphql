@@ -3,7 +3,7 @@ import { PostEntity } from '../../utils/DB/entities/DBPosts';
 import { BadRequest } from '../errors/badRequest.error';
 import { idNotFound } from '../replyMessages';
 
-interface PostOperations {
+export interface PostOperations {
   createPost: (createDto: any) => Promise<PostEntity>;
 }
 

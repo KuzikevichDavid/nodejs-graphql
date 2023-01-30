@@ -3,7 +3,7 @@ import { ProfileEntity } from '../../utils/DB/entities/DBProfiles';
 import { BadRequest } from '../errors/badRequest.error';
 import { existsWithEntityId, idNotFound } from '../replyMessages';
 
-interface ProfileOperations {
+export interface ProfileOperations {
   createProfile: (profileDTO: any) => Promise<ProfileEntity>;
 }
 
