@@ -35,7 +35,7 @@ export const userType: GraphQLObjectType = new GraphQLObjectType({
     posts: {
       type: new GraphQLList(postType),
       async resolve(parent, args, context: Context) {
-        return context.loader.postsByUserId.loadMany(parent.id);
+        return context.loader.postsByUserId.load(parent.id);
       }
     },
     subscribedToUser: {
