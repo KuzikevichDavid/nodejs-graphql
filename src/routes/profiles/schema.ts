@@ -8,7 +8,7 @@ export const createProfileBodySchema = {
     'street',
     'city',
     'userId',
-    'memberTypeId',
+    'memberTypeId'
   ],
   properties: {
     avatar: { type: 'string' },
@@ -19,10 +19,10 @@ export const createProfileBodySchema = {
     city: { type: 'string' },
     userId: { type: 'string', format: 'uuid' },
     memberTypeId: {
-      type: 'string',
-    },
+      type: 'string'
+    }
   },
-  additionalProperties: false,
+  additionalProperties: false
 } as const;
 
 export const changeProfileBodySchema = {
@@ -35,8 +35,8 @@ export const changeProfileBodySchema = {
     street: { type: 'string' },
     city: { type: 'string' },
     memberTypeId: {
-      type: 'string',
-    },
+      type: 'string'
+    }
   },
-  additionalProperties: false,
+  additionalProperties: false
 } as const;

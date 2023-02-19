@@ -1,11 +1,16 @@
+//import DataLoader = require("dataloader");
+import { GraphQLSchema } from 'graphql';
+import { mutations } from './mutations';
+import { rootQuery } from './query';
+
 export const graphqlBodySchema = {
   type: 'object',
   properties: {
     mutation: { type: 'string' },
     query: { type: 'string' },
     variables: {
-      type: 'object',
-    },
+      type: 'object'
+    }
   },
   oneOf: [
     {
@@ -14,10 +19,10 @@ export const graphqlBodySchema = {
       properties: {
         query: { type: 'string' },
         variables: {
-          type: 'object',
-        },
+          type: 'object'
+        }
       },
-      additionalProperties: false,
+      additionalProperties: false
     },
     {
       type: 'object',
@@ -25,10 +30,15 @@ export const graphqlBodySchema = {
       properties: {
         mutation: { type: 'string' },
         variables: {
-          type: 'object',
-        },
+          type: 'object'
+        }
       },
-      additionalProperties: false,
-    },
-  ],
+      additionalProperties: false
+    }
+  ]
 } as const;
+
+export const schema = new GraphQLSchema({
+  query: rootQuery,
+  mutation: mutations
+});

@@ -2,7 +2,7 @@ export const changeMemberTypeBodySchema = {
   type: 'object',
   properties: {
     discount: { type: 'number' },
-    monthPostsLimit: { type: 'number' },
+    monthPostsLimit: { type: 'number' }
   },
-  additionalProperties: false,
+  additionalProperties: false
 } as const;

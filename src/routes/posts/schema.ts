@@ -4,16 +4,16 @@ export const createPostBodySchema = {
   properties: {
     title: { type: 'string' },
     content: { type: 'string' },
-    userId: { type: 'string', format: 'uuid' },
+    userId: { type: 'string', format: 'uuid' }
   },
-  additionalProperties: false,
+  additionalProperties: false
 } as const;
 
 export const changePostBodySchema = {
   type: 'object',
   properties: {
     title: { type: 'string' },
-    content: { type: 'string' },
+    content: { type: 'string' }
   },
-  additionalProperties: false,
+  additionalProperties: false
 } as const;
